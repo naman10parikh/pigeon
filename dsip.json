@@ -2,6 +2,8 @@
   "dsip": "0.1",
   "product": "pigeon",
   "levels": ["agent"],
+  "domains": ["deliverability-correctness", "rendering-safety", "provider-currency"],
+  "levelTarget": "L1",
   "loop": {
     "cadence": "nightly",
     "steps": ["refresh-brain", "re-verify-tool-matrix", "run-eval-pyramid", "propose", "validate", "ship"]

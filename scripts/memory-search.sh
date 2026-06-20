@@ -12,6 +12,7 @@ PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 MEMORY_DIR="$PROJECT_DIR/memory"
 VAULT_DIR="$PROJECT_DIR/vault"
 RULES_DIR="$PROJECT_DIR/.claude/rules"
+BRAIN_DIR="$PROJECT_DIR/brain"  # pigeon's expertise brain — the queryable layer indexes THIS, not code history
 
 # Parse arguments
 QUERY=""
@@ -31,7 +32,9 @@ while [[ $# -gt 0 ]]; do
     --help|-h)
       echo "Usage: memory-search.sh \"query\" [--limit N] [--verbose]"
       echo ""
-      echo "Searches across Energy's memory system:"
+      echo "Searches pigeon's expertise brain + the memory system:"
+      echo "  - brain/*.md (the deliverability corpus: scenarios, OPINIONS, pitfalls, expertise-map)"
+      echo "  - brain/research/raw/*.md (raw field research)"
       echo "  - memory/LEARNINGS.md (learnings & patterns)"
       echo "  - memory/daily/*.md (session logs)"
       echo "  - memory/topics/*.md (permanent topic files)"
@@ -67,6 +70,7 @@ trap "rm -f $RESULTS_FILE" EXIT
 weight_for_source() {
   local file="$1"
   case "$file" in
+    */brain/*)           echo 5 ;;  # pigeon's expertise brain — the deliverability corpus (top priority)
     */.claude/rules/*)   echo 5 ;;  # Rules are highest priority
     */memory/LEARNINGS*) echo 4 ;;  # Learnings are core knowledge
     */memory/topics/*)   echo 4 ;;  # Topic files are curated
@@ -185,6 +189,14 @@ done
 
 # Rules
 for f in "$RULES_DIR"/*.md; do
+  [ -f "$f" ] && FILES+=("$f")
+done
+
+# pigeon's expertise brain (the queryable deliverability corpus — top-level artifacts + raw research)
+for f in "$BRAIN_DIR"/*.md; do
+  [ -f "$f" ] && FILES+=("$f")
+done
+for f in "$BRAIN_DIR"/research/raw/*.md; do
   [ -f "$f" ] && FILES+=("$f")
 done
 
