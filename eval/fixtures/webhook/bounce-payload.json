@@ -1,0 +1,10 @@
+{
+  "type": "email.bounced",
+  "created_at": "2026-06-20T00:00:00.000Z",
+  "data": {
+    "email_id": "fixture-0001",
+    "to": ["bounced@resend.dev"],
+    "email": "bounced@resend.dev",
+    "bounce": { "type": "hard", "subType": "general", "message": "mailbox does not exist" }
+  }
+}
