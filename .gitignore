@@ -24,3 +24,9 @@ packages/web/.next/
 vault/Untitled*.base
 
 .env
+
+# Build output
+dist/
+
+# Mutable runtime state. NOTE: the append-only run-log under logs/ stays COMMITTABLE (Observability §10) — do NOT ignore it.
+logs/suppression.json
