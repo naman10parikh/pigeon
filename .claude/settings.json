@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/hooks/stream-refuse-guard.sh\"",
+            "description": "pigeon stream-refuse-guard: HARD-REFUSE (O-02) — blocks any `pigeon send-test`/`notify` shell command routing a cold/marketing-tagged send through a transactional-only provider (postmark/resend-transactional) = account-death (SCN-05/PIT-02); also the auto-pause-on-spike branch (O-24). Exit 2 = block; appends an append-only `outcome:blocked` line to logs/runs.jsonl (Observability §10)."
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-start-context.sh\""
+          }
+        ]
+      }
+    ]
+  }
+}
