@@ -1,0 +1,10 @@
+{
+  "domain": "app.example.com",
+  "spf": "v=spf1 include:helpdesk-vendor.net ~all",
+  "dkim": {
+    "vendorselector": "v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDexampleVendorKeySignsUnderItsOwnDomainNOTYours0987654321zyxwvutsrqponmlkjihgfedcbaQWERTYUIOPIDAQAB"
+  },
+  "dmarc": "v=DMARC1; p=reject; adkim=s; aspf=s; rua=mailto:dmarc@example.com",
+  "signingDomain": "mail.helpdesk-vendor.net",
+  "envelopeFrom": "bounce.helpdesk-vendor.net"
+}

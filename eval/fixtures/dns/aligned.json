@@ -1,0 +1,10 @@
+{
+  "domain": "notifications.example.com",
+  "spf": "v=spf1 include:_spf.resend.com ~all",
+  "dkim": {
+    "resend": "v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDexampleAlignedPublicKeyMaterialForFixtureOnly1234567890abcdefABCDEFqwertyuiopasdfghjklzxcvbnmIDAQAB"
+  },
+  "dmarc": "v=DMARC1; p=reject; adkim=s; aspf=s; rua=mailto:dmarc@example.com",
+  "signingDomain": "notifications.example.com",
+  "envelopeFrom": "bounces.notifications.example.com"
+}
