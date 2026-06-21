@@ -8,7 +8,9 @@ CLI=(node dist/cli.js)
 
 step() { # <label> <needle> <argv...>
   local label="$1" needle="$2"; shift 2
-  local out; out="$("${CLI[@]}" "$@")"
+  # capture output + tolerate the verb's own exit code (a REFUSE exits non-zero by design;
+  # this test asserts each verb ROUTED to its handler, not that it "passed").
+  local out; out="$("${CLI[@]}" "$@" 2>&1 || true)"
   case "$out" in *"$needle"*) echo "  ok  $label" ;; *) echo "  FAIL $label — output lacked '$needle'"; exit 1 ;; esac
 }
 
