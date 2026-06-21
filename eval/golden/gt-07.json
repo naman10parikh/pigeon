@@ -1,0 +1,14 @@
+{
+  "id": "GT-07",
+  "scn": "SCN-11",
+  "kind": "L1",
+  "symptom": "New IP/domain must be warmed on a control loop, not blasted.",
+  "argv": [
+    "ask",
+    "new dedicated IP warmup ramp deferral 421 450"
+  ],
+  "expect": {
+    "stdout": "matched: SCN"
+  },
+  "note": "deterministic L1 \u2014 runs the built CLI and asserts; L2 grader tallies binary F1; L3 judge (judge.mjs) is cred-gated."
+}

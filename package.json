@@ -23,7 +23,8 @@
     "build": "tsc",
     "dev": "tsx src/cli.ts",
     "test": "vitest run",
-    "eval": "node dist/eval/eval.js",
+    "eval": "node eval/eval.mjs",
+    "eval:judge": "node eval/judge.mjs",
     "lint": "tsc --noEmit",
     "runs-view": "node scripts/runs-view.mjs"
   },

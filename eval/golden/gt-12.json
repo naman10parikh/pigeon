@@ -1,0 +1,14 @@
+{
+  "id": "GT-12",
+  "scn": "SCN-17",
+  "kind": "L1",
+  "symptom": "Do not 'fix' a correct corporate DKIM rewrite.",
+  "argv": [
+    "ask",
+    "corporate gateway rewrites DKIM signature relay"
+  ],
+  "expect": {
+    "stdout": "matched: SCN"
+  },
+  "note": "deterministic L1 \u2014 runs the built CLI and asserts; L2 grader tallies binary F1; L3 judge (judge.mjs) is cred-gated."
+}

@@ -1,0 +1,15 @@
+{
+  "id": "GT-03",
+  "scn": "SCN-05",
+  "kind": "L1",
+  "symptom": "A cold/prospecting message must never ride a transactional-only stream (account death).",
+  "argv": [
+    "stream-check",
+    "cold",
+    "resend"
+  ],
+  "expect": {
+    "stdout": "REFUSE"
+  },
+  "note": "deterministic L1 \u2014 runs the built CLI and asserts; L2 grader tallies binary F1; L3 judge (judge.mjs) is cred-gated."
+}

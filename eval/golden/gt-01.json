@@ -1,0 +1,19 @@
+{
+  "id": "GT-01",
+  "scn": "SCN-02",
+  "kind": "L1",
+  "symptom": "Mail authenticated (SPF+DKIM pass) but still spam-foldered \u2014 DMARC alignment failure.",
+  "argv": [
+    "verify",
+    "--dns-fixture",
+    "eval/fixtures/dns/unaligned.json",
+    "--json"
+  ],
+  "expect": {
+    "json": {
+      "ready": false,
+      "aligned": false
+    }
+  },
+  "note": "deterministic L1 \u2014 runs the built CLI and asserts; L2 grader tallies binary F1; L3 judge (judge.mjs) is cred-gated."
+}

@@ -1,0 +1,14 @@
+{
+  "id": "GT-05",
+  "scn": "SCN-13",
+  "kind": "L1",
+  "symptom": "One-click unsubscribe must be RFC-8058 POST-only (marketing).",
+  "argv": [
+    "ask",
+    "unsubscribe link one-click list-unsubscribe header POST"
+  ],
+  "expect": {
+    "stdout": "matched: SCN"
+  },
+  "note": "deterministic L1 \u2014 runs the built CLI and asserts; L2 grader tallies binary F1; L3 judge (judge.mjs) is cred-gated."
+}

@@ -1,0 +1,15 @@
+{
+  "id": "GT-11",
+  "scn": "PIT-05",
+  "kind": "L1",
+  "symptom": "A hard-bounced/complained address must be suppressed so it is never re-sent (PIT-05).",
+  "argv": [
+    "suppress",
+    "add",
+    "bounced@example.com"
+  ],
+  "expect": {
+    "stdout": "suppressed"
+  },
+  "note": "deterministic L1 \u2014 runs the built CLI and asserts; L2 grader tallies binary F1; L3 judge (judge.mjs) is cred-gated."
+}

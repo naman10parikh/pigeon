@@ -1,0 +1,14 @@
+{
+  "id": "GT-06",
+  "scn": "SCN-03",
+  "kind": "L1",
+  "symptom": "SPF must stay under the 10 DNS-lookup limit.",
+  "argv": [
+    "ask",
+    "SPF too many DNS lookups permerror 10 limit"
+  ],
+  "expect": {
+    "stdout": "matched: SCN"
+  },
+  "note": "deterministic L1 \u2014 runs the built CLI and asserts; L2 grader tallies binary F1; L3 judge (judge.mjs) is cred-gated."
+}

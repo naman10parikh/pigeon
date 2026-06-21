@@ -1,0 +1,15 @@
+{
+  "id": "GT-04",
+  "scn": "SCN-01",
+  "kind": "L1",
+  "symptom": "A transactional message on its own transactional stream is allowed.",
+  "argv": [
+    "stream-check",
+    "transactional",
+    "resend"
+  ],
+  "expect": {
+    "stdout": "ALLOW"
+  },
+  "note": "deterministic L1 \u2014 runs the built CLI and asserts; L2 grader tallies binary F1; L3 judge (judge.mjs) is cred-gated."
+}

@@ -1,0 +1,14 @@
+{
+  "id": "GT-08",
+  "scn": "SCN-09",
+  "kind": "L1",
+  "symptom": "Outlook (Word engine) needs a bulletproof VML button.",
+  "argv": [
+    "ask",
+    "button disappears in Outlook desktop VML"
+  ],
+  "expect": {
+    "stdout": "matched: SCN"
+  },
+  "note": "deterministic L1 \u2014 runs the built CLI and asserts; L2 grader tallies binary F1; L3 judge (judge.mjs) is cred-gated."
+}

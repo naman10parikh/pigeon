@@ -1,0 +1,19 @@
+{
+  "id": "GT-02",
+  "scn": "SCN-02b",
+  "kind": "L1",
+  "symptom": "Correctly aligned sending domain should report ready.",
+  "argv": [
+    "verify",
+    "--dns-fixture",
+    "eval/fixtures/dns/aligned.json",
+    "--json"
+  ],
+  "expect": {
+    "json": {
+      "ready": true,
+      "aligned": true
+    }
+  },
+  "note": "deterministic L1 \u2014 runs the built CLI and asserts; L2 grader tallies binary F1; L3 judge (judge.mjs) is cred-gated."
+}
