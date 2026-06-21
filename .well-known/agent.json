@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "0.1",
+  "name": "pigeon",
+  "description": "The deliverability-correct transactional-email + notifications layer — it arrives, in the inbox, not the spam folder. Powered by Energy.",
+  "version": "0.1.0",
+  "provider": { "organization": "Energy", "url": "https://github.com/naman10parikh/pigeon" },
+  "endpoint": "stdio://pigeon-mcp",
+  "transport": "stdio",
+  "documentationUrl": "https://github.com/naman10parikh/pigeon/blob/main/AGENTS.md",
+  "capabilities": [
+    "verify",
+    "send-test",
+    "lint",
+    "stream-check",
+    "unsubscribe-gen",
+    "warmup-plan",
+    "suppress",
+    "webhook-verify",
+    "ses-narrative",
+    "migrate-plan",
+    "notify",
+    "ask"
+  ],
+  "skills": [
+    {
+      "id": "deliverability-audit",
+      "name": "Deliverability audit",
+      "description": "Audit a sending domain/config (SPF/DKIM/DMARC alignment, streams, unsubscribe, warmup) against pigeon's 19 scenarios + 26 pitfalls.",
+      "tags": ["email", "deliverability", "dmarc", "spf", "dkim"]
+    },
+    {
+      "id": "template-doctor",
+      "name": "Template render audit",
+      "description": "Audit an email template for cross-client render hazards (Gmail clipping, Outlook VML, dark mode, image-blocking).",
+      "tags": ["email", "react-email", "rendering"]
+    },
+    {
+      "id": "ask",
+      "name": "Ask the deliverability employee",
+      "description": "Diagnose an email symptom → resolution → prevention, cited to the brain.",
+      "tags": ["email", "diagnosis"]
+    }
+  ],
+  "defaultInputModes": ["text"],
+  "defaultOutputModes": ["text"]
+}
