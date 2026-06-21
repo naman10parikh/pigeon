@@ -1,0 +1,40 @@
+# pigeon
+
+> The deliverability-correct transactional-email + notifications layer for AI
+> agents — it arrives, in the inbox, not the spam folder. Powered by Energy.
+> pigeon is a domain-expert employee: it knows SPF/DKIM/DMARC alignment, sending
+> streams, RFC 8058 one-click unsubscribe, IP/domain warmup, and cross-client
+> email rendering, and it refuses the footguns that silently land mail in spam.
+
+## Start here
+
+- [AGENTS.md](./AGENTS.md): how an agent consumes pigeon (CLI verbs, MCP tools, when to call which).
+- [identity/SOUL.md](./identity/SOUL.md): who pigeon is — the creed ("the ledger is the truth, not the status code"), what it IS / DOES / REFUSES.
+- [brain/OPINIONS.md](./brain/OPINIONS.md): the stances a consuming agent should adopt (stream truth-table, POST-only unsubscribe, render-don't-guess).
+
+## Brain (the expertise — cite these)
+
+- [brain/EXPERTISE-MAP.md](./brain/EXPERTISE-MAP.md): the territory — where each concern lives.
+- [brain/BATTLE-TESTED-SCENARIOS.md](./brain/BATTLE-TESTED-SCENARIOS.md): 19 real SCN-* scenarios (symptom → diagnosis → resolution → prevention).
+- [brain/KNOWN-PITFALLS.md](./brain/KNOWN-PITFALLS.md): 26 PIT-* footguns to refuse.
+- [brain/GAPS-AND-DISPUTES.md](./brain/GAPS-AND-DISPUTES.md): where the field disagrees / what pigeon is unsure about.
+- [brain/TOOL-MATRIX.md](./brain/TOOL-MATRIX.md): the provider/tool landscape (Resend, Postmark, SES, SendGrid, Novu, Cloudflare).
+
+## Tools (CLI verbs == MCP tools, 1:1)
+
+`verify` · `send-test` · `lint` · `stream-check` · `unsubscribe-gen` ·
+`warmup-plan` · `suppress` · `webhook-verify` · `ses-narrative` · `migrate-plan` ·
+`notify` · `ask`. Run `pigeon --help` for the CLI; the MCP server
+(`pigeon-mcp`, stdio) exposes the same set as `pigeon.*` tools. The A2A card is
+at [.well-known/agent.json](./.well-known/agent.json).
+
+## Skills (repo-authored, each cites a brain node)
+
+- pigeon-deliverability-audit · pigeon-email-render-lint · pigeon-stream-separation ·
+  pigeon-unsubscribe-rfc8058 · pigeon-warmup-control-loop · pigeon-ses-sandbox-exit
+  (see `skills/<name>/SKILL.md`).
+
+## Sub-agents
+
+- `deliverability-auditor` (audit a domain/config vs the 19 scenarios + 26 pitfalls) ·
+  `template-doctor` (audit an email template for cross-client render hazards).

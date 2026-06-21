@@ -1,0 +1,31 @@
+{
+  "name": "pigeon",
+  "version": "0.1.0",
+  "description": "The deliverability-correct transactional-email + notifications layer — it arrives, in the inbox, not the spam folder. Powered by Energy.",
+  "author": "Energy Platform",
+  "license": "MIT",
+  "homepage": "https://github.com/naman10parikh/pigeon",
+  "keywords": ["email", "deliverability", "transactional-email", "dmarc", "spf", "dkim", "resend", "react-email"],
+  "cli": { "command": "pigeon", "bin": "./dist/cli.js" },
+  "mcpServers": {
+    "pigeon": { "command": "node", "args": ["./dist/mcp/server.js"], "env": { "RESEND_API_KEY": "${RESEND_API_KEY}" } }
+  },
+  "skills": [
+    "pigeon-deliverability-audit",
+    "pigeon-email-render-lint",
+    "pigeon-ses-sandbox-exit",
+    "pigeon-stream-separation",
+    "pigeon-unsubscribe-rfc8058",
+    "pigeon-warmup-control-loop"
+  ],
+  "hooks": {
+    "PreToolUse": [
+      { "matcher": "Bash", "command": "./hooks/stream-refuse-guard.sh" }
+    ]
+  },
+  "agents": [
+    ".claude/agents/deliverability-auditor.md",
+    ".claude/agents/template-doctor.md"
+  ],
+  "a2a": "./.well-known/agent.json"
+}
