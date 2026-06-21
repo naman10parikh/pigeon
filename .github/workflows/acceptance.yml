@@ -1,0 +1,40 @@
+name: acceptance
+
+# THE acceptance test (PLAN §5), red-blocking on push + PR.
+# Part 1 (readiness, $0): verify SPF+DKIM+DMARC present AND aligned against the vendored fixture.
+# Part 2 (delivery): send-test --test-mode to delivered@resend.dev (cred-gated; fail-loud if no key).
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  acceptance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: Part 1 — readiness (verify, $0 fixture)
+        run: node dist/cli.js verify --dns-fixture eval/fixtures/dns/aligned.json
+      - name: Part 2 — delivery (send-test, test-mode, pass^3)
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        run: |
+          # GT-13: network flake → retry up to 3 (pass^k, k>=3). Fail-loud if no key (no continue-on-error).
+          for i in 1 2 3; do
+            node dist/cli.js send-test --provider resend --test-mode --template welcome --to delivered@resend.dev && exit 0
+            echo "send-test attempt $i failed; retrying"; sleep 5
+          done
+          echo "acceptance Part 2 failed after 3 attempts"; exit 1

@@ -1,0 +1,37 @@
+name: health-check
+
+# Scheduled deliverability health check (PLAN §3 component 8 + HARNESS-OVERRIDES §8).
+# ENABLED schedule (not commented — the #1 fleet-gap lesson) + manual dispatch.
+on:
+  schedule:
+    - cron: "17 9 * * *" # daily 09:17 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: Deliverability health check (fixture-default, $0)
+        run: |
+          # Live domain when PIGEON_TEST_DOMAIN is set; otherwise the vendored fixture (RQ-1 default).
+          if [ -n "${{ vars.PIGEON_TEST_DOMAIN }}" ]; then
+            node dist/cli.js verify "${{ vars.PIGEON_TEST_DOMAIN }}"
+          else
+            node dist/cli.js verify --dns-fixture eval/fixtures/dns/aligned.json
+          fi
+      - name: Show run-log tail
+        if: always()
+        run: tail -n 5 logs/runs.jsonl || true
