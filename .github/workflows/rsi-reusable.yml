@@ -1,0 +1,35 @@
+name: pigeon RSI (reusable, deterministic $0 half)
+
+# The tokenless, deterministic half of pigeon's RSI loop (PLAN §11, HARNESS-OVERRIDES RSI §B).
+# Re-runs the golden eval (regression gate) + confirms the dsip spec + appends to runs.jsonl.
+# NO CLAUDE_CODE_OAUTH_TOKEN — the Claude proposal half (D8) is gated separately (see rsi.workflow.js).
+on:
+  workflow_call: {}
+
+permissions:
+  contents: read
+
+jobs:
+  deterministic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: Golden-task regression gate (L1/L2, $0)
+        run: pnpm eval
+      - name: dsip spec present (Darwin conformance ≥ L1)
+        run: test -f dsip.json && node -e "JSON.parse(require('fs').readFileSync('dsip.json','utf8')); console.log('dsip.json valid')"
+      - name: Record RSI run
+        if: always()
+        run: |
+          mkdir -p logs
+          printf '{"verb":"rsi","outcome":"%s","ms":0,"model":"deterministic-zero-cost"}\n' "${{ job.status }}" >> logs/runs.jsonl
+          tail -n 3 logs/runs.jsonl || true

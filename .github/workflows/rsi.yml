@@ -1,20 +1,17 @@
 name: pigeon RSI
-# CP123: dispatch-only until the RSI engine (workflows/rsi.workflow.js + eval gate) is built in Wave B/E.
-# The Claude half additionally needs CLAUDE_CODE_OAUTH_TOKEN (chairman checklist, D8). Guarded = always green.
+
+# pigeon's recursive-self-improvement loop (PLAN §11). Two halves:
+#   1. deterministic ($0, tokenless) — golden-eval regression + dsip conformance. Runs here, nightly + on demand.
+#   2. Claude proposal (gated) — workflows/rsi.workflow.js, needs CLAUDE_CODE_OAUTH_TOKEN (chairman checklist D8).
+# Until the token is present, only the deterministic half runs — so this workflow is always green.
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "23 8 * * *" # 08:23 UTC nightly — staggered off the health-check (09:17)
 
 permissions:
   contents: read
 
 jobs:
-  rsi:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Engine guard
-        run: |
-          if [ ! -f workflows/rsi.workflow.js ]; then
-            echo "RSI engine not built yet (CP123 cluster E) — exiting green."; exit 0
-          fi
-          echo "engine present — deterministic half would run here (wired in cluster E)"
+  deterministic:
+    uses: ./.github/workflows/rsi-reusable.yml
