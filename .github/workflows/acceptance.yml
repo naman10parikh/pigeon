@@ -38,3 +38,30 @@ jobs:
             echo "send-test attempt $i failed; retrying"; sleep 5
           done
           echo "acceptance Part 2 failed after 3 attempts"; exit 1
+
+  # ADDITIVE, secret-gated, NON-BLOCKING: the E2B Firecracker sandbox-boot variant (E22,
+  # PLAN §3 component 11 / HARNESS-OVERRIDES §11). It boots a microVM, runs `pigeon send-test
+  # --test-mode` INSIDE the sandbox, asserts rc=0 + the idempotency proof, and records the cold
+  # start to logs/runs.jsonl. This is the SANDBOX-COMPONENT gate, NOT the merge gate — the
+  # `acceptance` job above still gates the merge on the $0 runner (D15/RQ-8). `continue-on-error`
+  # + `push`-only means it can NEVER turn the merge gate red. Absent E2B_API_KEY, sandbox/boot.mjs
+  # runs the same send-test flow on the host ($0 fallback) and still exits 0.
+  sandbox-boot:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' }}
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile || pnpm install
+      - run: pnpm build
+      - name: E2B sandbox-boot (send-test in-VM; $0 host fallback if no key — additive, never blocks)
+        env:
+          E2B_API_KEY: ${{ secrets.E2B_API_KEY }}
+        run: node sandbox/boot.mjs
