@@ -18,6 +18,13 @@ if (!key) {
   process.exit(0);
 }
 
+// The Messages API needs a model name and pigeon never picks one (a fixed ID goes stale): the person names it.
+const model = process.env.PIGEON_JUDGE_MODEL?.trim();
+if (!model) {
+  console.log("L3 judge SKIP: no PIGEON_JUDGE_MODEL (advisory tier, non-blocking). Name the judge model to run.");
+  process.exit(0);
+}
+
 // Generate the artifact under judgement: the SES production-access narrative (GT-09).
 let narrative = "";
 try {
@@ -34,7 +41,7 @@ complaints are handled, (3) how unsubscribes/suppression work, and (4) the type/
 i.e. it would plausibly pass a human SES reviewer. Narrative:\n\n${narrative.slice(0, 6000)}`;
 
 const body = {
-  model: "claude-opus-4-8",
+  model,
   max_tokens: 200,
   messages: [{ role: "user", content: rubric }],
 };
