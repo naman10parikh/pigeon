@@ -1,0 +1,11 @@
+# pigeon's gitleaks baseline: every upstream rule, plus one allowlist entry.
+#
+# pigeon names each send with an idempotency key, "pgn_" followed by 32 hex characters of a SHA-256 of the send.
+# It is an identifier, not a credential, but it looks like a generic API key, so the run log trips the scanner.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "pigeon idempotency keys (pgn_ + 32 hex of a SHA-256), not credentials"
+regexes = ['''pgn_[0-9a-f]{32}''']
