@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: If you use this software, please cite it as below.
+title: "Pigeon: Transactional email that reaches the inbox: authenticated, kept apart from marketing mail, easy to unsubscribe."
+type: software
+authors:
+  - family-names: Parikh
+    given-names: Naman
+repository-code: "https://github.com/naman10parikh/pigeon"
+license: MIT
+version: "0.1.0"
+abstract: "Transactional email that reaches the inbox: authenticated, kept apart from marketing mail, easy to unsubscribe."
+keywords: ["agent-native", "transactional-email", "deliverability", "dmarc"]
