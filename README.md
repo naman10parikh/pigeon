@@ -1,5 +1,172 @@
 # pigeon
 
-TODO: public-facing one-liner.
+<!-- fleet:header:start -->
+[![License: MIT](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE) [![Agent-native](https://img.shields.io/badge/agent--native-yes-2f5d8a?style=flat-square)](AGENTS.md) [![MCP server](https://img.shields.io/badge/MCP-server-1e3f60?style=flat-square)](#use-it-from-any-coding-agent) [![Skills](https://img.shields.io/badge/skills-6-2f6b4f?style=flat-square)](skills/)
 
-A recursively self-improving, agent-native harness — built on the Energy harness formula.
+**Transactional email that reaches the inbox: authenticated, kept apart from marketing mail, easy to unsubscribe.**
+
+Pigeon is an agent-native, recursively self-improving agent employee whose job is transactional email. Coding agents use it through its skills, its MCP server and its command line. It improves itself through its own evals and a scheduled improvement loop, and a person reviews every change.
+
+[AGENTS.md](AGENTS.md) · [llms.txt](llms.txt) · [Skills](skills/) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md) · [All projects](https://github.com/naman10parikh)
+<!-- fleet:header:end -->
+
+## What it is
+
+pigeon makes transactional email arrive in the inbox, not the spam folder. It sits above whichever email
+provider SDK is wired (Resend by default; Postmark and SES as alternatives) and owns what the SDK leaves
+out: domain authentication and alignment, keeping transactional mail apart from marketing mail, rendering
+that works in every client, suppression, warmup, one-click unsubscribe and safe provider migration. It
+is for teams and agents that send password resets, receipts and alerts and need them to land.
+
+<!-- fleet:use:start -->
+## Use it from any coding agent
+
+**Claude Code**: the plugin brings the skills, sub-agents, hooks and MCP server.
+
+```
+/plugin marketplace add naman10parikh/pigeon
+/plugin install pigeon@pigeon
+```
+
+**Its MCP server**, in any MCP client:
+
+```bash
+claude mcp add --transport stdio pigeon -- npx -y -p github:naman10parikh/pigeon pigeon-mcp
+codex mcp add pigeon -- npx -y -p github:naman10parikh/pigeon pigeon-mcp
+```
+
+Cursor (`.cursor/mcp.json`), Gemini CLI (`.gemini/settings.json`) and most other clients take the same command as JSON:
+
+```json
+{
+  "mcpServers": {
+    "pigeon": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "-p",
+        "github:naman10parikh/pigeon",
+        "pigeon-mcp"
+      ]
+    }
+  }
+}
+```
+
+**Gemini CLI**: the extension brings the context and the MCP server.
+
+```bash
+gemini extensions install https://github.com/naman10parikh/pigeon
+```
+
+**One skill** (6 in all, in [skills/](skills/)), in any agent that reads Agent Skills:
+
+```bash
+gemini skills install https://github.com/naman10parikh/pigeon --path skills/pigeon-deliverability-audit
+git clone --depth 1 https://github.com/naman10parikh/pigeon /tmp/pigeon && cp -r /tmp/pigeon/skills/pigeon-deliverability-audit ~/.claude/skills/
+```
+
+**The command line:**
+
+```bash
+npx -y -p github:naman10parikh/pigeon pigeon --help
+```
+
+Codex, Cursor, OpenCode, GitHub Copilot and other agents read [AGENTS.md](AGENTS.md); Claude Code reads [CLAUDE.md](CLAUDE.md) and Gemini CLI reads [GEMINI.md](GEMINI.md), which import it. [llms.txt](llms.txt) maps every surface for agents that read first.
+<!-- fleet:use:end -->
+
+## Quick start
+
+You need Node.js 18 or later and pnpm.
+
+```bash
+git clone https://github.com/naman10parikh/pigeon && cd pigeon
+pnpm install && pnpm build
+
+# Check SPF, DKIM, DMARC and alignment (here from a DNS fixture, so it needs no network)
+node dist/cli.js verify notifications.example.com --dns-fixture eval/fixtures/dns/aligned.json
+
+# Refuse the routing that gets a whole account suspended (exits 1 with the reason)
+node dist/cli.js stream-check cold postmark
+
+# Send in provider test mode with an idempotency key (without RESEND_API_KEY it returns a stub result)
+node dist/cli.js send-test --provider resend --test-mode --template welcome --to delivered@resend.dev
+
+# Find rendering hazards in a React Email template
+node dist/cli.js lint src/templates/welcome.tsx
+
+# Diagnose a symptom against the 19 battle-tested scenarios
+node dist/cli.js ask "password reset emails land in spam"
+
+# Run the tests and the golden evals (12 tasks, F1 floor 0.80)
+pnpm test && pnpm eval
+```
+
+Without a clone, `npx -y -p github:naman10parikh/pigeon pigeon --help` runs the command line straight
+from GitHub.
+
+## How it works
+
+- **Check DNS yourself.** `pigeon verify` reads SPF, DKIM and DMARC with its own lookups and checks
+  alignment. It never trusts a provider's "verified" flag and never polls a mutating endpoint.
+- **Keep the streams apart.** Every send carries a stream tag: transactional, marketing or cold.
+  `pigeon stream-check` refuses to route cold or marketing mail through a transactional-only provider,
+  because that gets the whole account suspended, password resets included. A hook enforces the same rule
+  before an agent's shell command runs.
+- **Send once.** Every send carries an idempotency key derived from its content, so a retry after a
+  network error does not send twice.
+- **Render correctly.** `pigeon lint` finds the Gmail, Outlook and preview-text hazards that send good
+  mail to spam or break it on screen.
+- **Handle what comes back.** `pigeon suppress` and `pigeon webhook verify` stop mail to bounced and
+  complaining addresses across providers; `pigeon warmup plan` ramps a new domain by watching deferrals.
+- **Know the field.** The brain in `brain/` holds 10 jobs, 19 battle-tested scenarios, 26 opinions and 26
+  known pitfalls. `pigeon ask "<symptom>"` matches a symptom to a scenario.
+
+Authentication is necessary, not sufficient: reputation and engagement still decide inbox placement, and
+pigeon never claims otherwise. Every send is logged to `logs/runs.jsonl`. A person can open the local
+cockpit with `pigeon serve` (http://127.0.0.1:7791). It is built on the Energy harness formula: one
+repository is one agent employee, with its identity, memory, skills, hooks, sub-agents and MCP server
+inside it.
+
+<!-- fleet:anatomy:start -->
+## What it is made of
+
+Every project in this fleet is graded on the same 11 harness components and on self-improvement. Each mark is backed by a file you can open.
+
+| Component | Grade | Where |
+| --- | --- | --- |
+| Identity | ✅ | identity/SOUL.md:8 |
+| Memory | ✅ | identity/MEMORY.md:1, scripts/memory-search.sh:118, memory/LEARNINGS.md:5 |
+| Skills | ✅ | skills/pigeon-stream-separation/SKILL.md:1 (6 skills) |
+| Tools/CLIs | ✅ | package.json:7 |
+| Hooks | ✅ | .claude/settings.json:4, hooks/hooks.json:3 |
+| Sub-agents | ✅ | .claude/agents/deliverability-auditor.md:2, .claude/agents/template-doctor.md:2 |
+| MCPs | ✅ | src/mcp/tools.ts:58, .mcp.json:3 |
+| Dispatch | ✅ | src/cli.ts:7, eval/flows/multi-verb.sh, .github/workflows/rsi.yml:10 |
+| Evals | ✅ | eval/eval.mjs, .github/workflows/ci.yml:62 |
+| Observability | ✅ | src/lib/log.ts:26, logs/runs.jsonl |
+| Sandbox/Infra | ✅ | sandbox/boot.mjs:150 |
+| RSI / open-endedness | ✅ | dsip.json:11, .github/workflows/rsi.yml:10 |
+
+✅ real and tested · 🟡 partial, with the reason in the row · ❌ absent
+<!-- fleet:anatomy:end -->
+
+<!-- fleet:footer:start -->
+## How it improves itself
+
+It carries its own evals and a self-improvement contract, [`dsip.json`](dsip.json) (level L1). A scheduled loop runs the evals, tries a change in a sandbox and opens it for review. A change that lowers a score is not merged, and a person merges every change. Lessons it learns are kept as rules in its memory files.
+
+## Part of a fleet
+
+One of the agent-native, recursively self-improving open-source projects by [Naman Parikh](https://github.com/naman10parikh). Each one is an agent employee that owns one part of an agent's harness or of the product around it.
+
+Siblings: [agentdial](https://github.com/naman10parikh/agentdial) (identity) · [wikimem](https://github.com/naman10parikh/wikimem) (memory) · [skillsmith](https://github.com/naman10parikh/skillsmith) (skills) · [agent-booster](https://github.com/naman10parikh/agent-booster) (tools / CLIs) · [armory](https://github.com/naman10parikh/armory) (MCPs and the component registry) · [agentgrid](https://github.com/naman10parikh/agentgrid) (dispatch) · [agentswarm](https://github.com/naman10parikh/agentswarm) (dispatch) · [agentbench](https://github.com/naman10parikh/agentbench) (evals) · [agentmoney](https://github.com/naman10parikh/agentmoney) (observability) · [claude-harness](https://github.com/naman10parikh/claude-harness) (the whole harness, as a template).
+
+## Contributing and security
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md); AI-assisted pull requests are welcome. Report a vulnerability privately, as [SECURITY.md](SECURITY.md) explains.
+
+## License
+
+MIT, © 2026 Naman Parikh. See [LICENSE](LICENSE).
+<!-- fleet:footer:end -->
