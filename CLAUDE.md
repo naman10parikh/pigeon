@@ -94,8 +94,9 @@ session. Honest 🟡 over a faked ✅ where live proof is pending (inbound round
 ## Model routing
 
 Under D14, every agentic node (sub-agents, the RSI Claude-half, any workflow `agent()` call) runs on
-**`claude-opus-4-8[1m]`, max effort** — specified **explicitly**, never a bare default (bare-default model
-inheritance is what killed the CP123-C builders). pigeon does **not** reimplement model routing — it consumes
+**the latest flagship Opus, max effort** — Claude Code's default or the alias `opus`, never a model ID (an ID
+freezes on an old model); a sub-agent still names its model, since bare-default inheritance is what killed the
+CP123-C builders. pigeon does **not** reimplement model routing — it consumes
 energy's **`scripts/budget-manager.sh`** as the routing owner. The weekly-budget *constraint* is disabled
 (D14): always Opus, never downshift, never pause for budget; only a hard 5-hour 429 throttles → pause-resume.
 
