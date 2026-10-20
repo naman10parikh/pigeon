@@ -27,7 +27,7 @@ pigeon suppress add|check <addr>       # cross-provider hard-bounce/complaint su
 pigeon webhook verify <provider> <payload>  # validate a bounce/complaint webhook signature → suppress (JTBD-4)
 pigeon ses-narrative [--domain <d>]    # author the SES production-access narrative from implemented handling (JTBD-7)
 pigeon migrate plan <from> <to>        # the safe-migration runbook: export-logs-first, re-verify, warm-from-zero (JTBD-8)
-pigeon notify <channels> [--provider novu]  # multi-channel fan-out email+push+SMS+in-app (notifications folded in)
+pigeon notify <channels> [--provider novu] [--dry-run]  # multi-channel fan-out email+push+SMS+in-app; Novu sending not built yet, so it exits 1 unless --dry-run
 pigeon inbound setup [--provider cloudflare]  # Cloudflare Email Routing → webhook → gateway (JTBD-9)
 pigeon doctor                          # SDK/runtime health: pinned versions, @react-email/render present, key valid (JTBD-10)
 pigeon ask "<symptom>"                 # diagnose against the 19 battle-tested scenarios (the ask-the-employee path)

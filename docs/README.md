@@ -100,7 +100,7 @@ After `pnpm build`, `pnpm eval` runs the 12 golden tasks. It fails if any task f
 
 **What does it not do?**
 It does not send marketing campaigns.
-`notify` records the channels it would use but sends nothing, because the Novu call is not wired yet.
+`notify` sends nothing, because the Novu call is not wired yet. It says "not sent" and exits 1, unless you pass `--dry-run` to preview the channels.
 `inbound setup` prints configuration and a runbook. It does not set up mail routing for you.
 Only the `welcome` template ships today.
 The send cache lasts one run. Across runs, the key sent to Resend is what stops a second send.

@@ -1,7 +1,7 @@
 /**
  * Novu multi-channel adapter (the OSS default for `notify` — RQ-3, D10). A THIN fan-out behind the
- * same send()-shaped discipline: email + push + SMS + in-app. Mock/dry-run by default (RQ-15) — a
- * live Novu send is on-demand (needs NOVU_API_KEY), not the merge bar (PLAN §13 risk 4).
+ * same send()-shaped discipline: email + push + SMS + in-app. The Novu trigger call is NOT wired in
+ * this version, so nothing is ever sent: every channel reports dispatched:false (PLAN §13 risk 4).
  *
  * Knock is the documented alt (best DX / superior multi-tenant prefs, relevant to PIT-25) — NOT
  * wired (Karpathy minimum-viable). pigeon does transactional + notifications, never campaigns.
@@ -13,7 +13,7 @@ export type NotifyChannel = (typeof NOTIFY_CHANNELS)[number];
 export interface ChannelStatus {
   channel: NotifyChannel;
   dispatched: boolean;
-  mode: "dry-run" | "live";
+  mode: "dry-run" | "not-sent";
   note: string;
 }
 
@@ -35,24 +35,18 @@ export function parseChannels(raw: string): NotifyChannel[] {
 }
 
 /**
- * Fan out a notification across channels. Dry-run by default: records intent per channel without a
- * live send. With NOVU_API_KEY present + live=true, this is where a real Novu trigger call would go
- * (documented; not wired in this wave to keep the acceptance test Resend-only).
+ * Plan a notification fan-out across channels. Nothing is sent: the real Novu trigger call would go
+ * here, and it is not wired yet (it keeps the acceptance test Resend-only). A dry run says it sent
+ * nothing on purpose; otherwise each channel reports "not sent".
  */
 export function fanOut(
   channels: NotifyChannel[],
-  opts: { live?: boolean } = {},
+  opts: { dryRun?: boolean } = {},
 ): ChannelStatus[] {
-  const haveKey = Boolean(process.env.NOVU_API_KEY);
-  const live = Boolean(opts.live) && haveKey;
   return channels.map((channel) => ({
     channel,
-    dispatched: true,
-    mode: live ? "live" : "dry-run",
-    note: live
-      ? "would trigger via Novu (live wiring is on-demand)"
-      : haveKey
-        ? "dry-run (pass --live to use the present NOVU_API_KEY)"
-        : "dry-run (no NOVU_API_KEY; live fan-out is on-demand — RQ-15)",
+    dispatched: false,
+    mode: opts.dryRun ? "dry-run" : "not-sent",
+    note: opts.dryRun ? "dry run, nothing sent" : "Novu sending is not built yet",
   }));
 }

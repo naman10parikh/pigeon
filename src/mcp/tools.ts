@@ -158,10 +158,10 @@ export const TOOL_DESCRIPTORS: readonly ToolDescriptor[] = [
   {
     name: "pigeon.notify",
     description:
-      "Multi-channel notification fan-out (email + push + SMS + in-app) behind the same send() shape — Novu default, mock/dry-run by default (RQ-3/RQ-15). Returns { dispatched[], perChannelStatus }.",
+      "Multi-channel notification fan-out (email + push + SMS + in-app) behind the same send() shape, Novu default (RQ-3). This version sends nothing: the Novu call is not wired, so it returns an error saying 'not sent', unless dryRun is true. Returns { sent: false, dispatched: [], perChannelStatus }.",
     inputSchema: {
       type: "object",
-      properties: { channels: STR_ARR, provider: STR },
+      properties: { channels: STR_ARR, provider: STR, dryRun: BOOL },
       required: ["channels"],
     },
   },
@@ -297,6 +297,7 @@ export async function callTool(
       return fromVerb(
         runNotify(asStringArray(args.channels, "channels").join(","), {
           ...(optString(args.provider) !== undefined ? { provider: optString(args.provider) } : {}),
+          ...(optBool(args.dryRun) !== undefined ? { dryRun: optBool(args.dryRun) } : {}),
         }),
       );
 
