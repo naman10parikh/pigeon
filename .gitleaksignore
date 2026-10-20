@@ -1,0 +1,53 @@
+# gitleaks findings that are derived hashes, not keys (CP158, 2026-10-19).
+# All 49 are `idempotencyKey` values in logs/runs.jsonl: "pgn_" + the first 32 hex characters of a
+# SHA-256 over the send's content (src/lib/idempotency.ts:31), written by pigeon's own run log.
+# No email address appears in any version of the log.
+14cee67492b63ee9637896b69c27c0026919c64c:logs/runs.jsonl:generic-api-key:192
+14cee67492b63ee9637896b69c27c0026919c64c:logs/runs.jsonl:generic-api-key:194
+14cee67492b63ee9637896b69c27c0026919c64c:logs/runs.jsonl:generic-api-key:195
+14cee67492b63ee9637896b69c27c0026919c64c:logs/runs.jsonl:generic-api-key:196
+14cee67492b63ee9637896b69c27c0026919c64c:logs/runs.jsonl:generic-api-key:197
+14cee67492b63ee9637896b69c27c0026919c64c:logs/runs.jsonl:generic-api-key:198
+14cee67492b63ee9637896b69c27c0026919c64c:logs/runs.jsonl:generic-api-key:199
+14cee67492b63ee9637896b69c27c0026919c64c:logs/runs.jsonl:generic-api-key:200
+14cee67492b63ee9637896b69c27c0026919c64c:logs/runs.jsonl:generic-api-key:201
+14cee67492b63ee9637896b69c27c0026919c64c:logs/runs.jsonl:generic-api-key:203
+14cee67492b63ee9637896b69c27c0026919c64c:logs/runs.jsonl:generic-api-key:204
+14cee67492b63ee9637896b69c27c0026919c64c:logs/runs.jsonl:generic-api-key:205
+14cee67492b63ee9637896b69c27c0026919c64c:logs/runs.jsonl:generic-api-key:206
+6704f17f4d9f2569895de5ef0cb8fce93d2e6d17:logs/runs.jsonl:generic-api-key:53
+6704f17f4d9f2569895de5ef0cb8fce93d2e6d17:logs/runs.jsonl:generic-api-key:54
+6704f17f4d9f2569895de5ef0cb8fce93d2e6d17:logs/runs.jsonl:generic-api-key:55
+6704f17f4d9f2569895de5ef0cb8fce93d2e6d17:logs/runs.jsonl:generic-api-key:56
+8d52a3958205b527ee3016be9bda262ba9ca6916:logs/runs.jsonl:generic-api-key:139
+8d52a3958205b527ee3016be9bda262ba9ca6916:logs/runs.jsonl:generic-api-key:140
+8d52a3958205b527ee3016be9bda262ba9ca6916:logs/runs.jsonl:generic-api-key:141
+8d52a3958205b527ee3016be9bda262ba9ca6916:logs/runs.jsonl:generic-api-key:142
+8d52a3958205b527ee3016be9bda262ba9ca6916:logs/runs.jsonl:generic-api-key:143
+8d52a3958205b527ee3016be9bda262ba9ca6916:logs/runs.jsonl:generic-api-key:144
+8d52a3958205b527ee3016be9bda262ba9ca6916:logs/runs.jsonl:generic-api-key:145
+8d52a3958205b527ee3016be9bda262ba9ca6916:logs/runs.jsonl:generic-api-key:146
+8d52a3958205b527ee3016be9bda262ba9ca6916:logs/runs.jsonl:generic-api-key:159
+8d52a3958205b527ee3016be9bda262ba9ca6916:logs/runs.jsonl:generic-api-key:160
+8d52a3958205b527ee3016be9bda262ba9ca6916:logs/runs.jsonl:generic-api-key:161
+8d52a3958205b527ee3016be9bda262ba9ca6916:logs/runs.jsonl:generic-api-key:162
+8d52a3958205b527ee3016be9bda262ba9ca6916:logs/runs.jsonl:generic-api-key:175
+8d52a3958205b527ee3016be9bda262ba9ca6916:logs/runs.jsonl:generic-api-key:176
+8d52a3958205b527ee3016be9bda262ba9ca6916:logs/runs.jsonl:generic-api-key:177
+8d52a3958205b527ee3016be9bda262ba9ca6916:logs/runs.jsonl:generic-api-key:178
+c6730a5f7158fe4516466dd508324ef24e486a56:logs/runs.jsonl:generic-api-key:10
+c6730a5f7158fe4516466dd508324ef24e486a56:logs/runs.jsonl:generic-api-key:33
+c6730a5f7158fe4516466dd508324ef24e486a56:logs/runs.jsonl:generic-api-key:34
+c6730a5f7158fe4516466dd508324ef24e486a56:logs/runs.jsonl:generic-api-key:35
+c6730a5f7158fe4516466dd508324ef24e486a56:logs/runs.jsonl:generic-api-key:36
+c6730a5f7158fe4516466dd508324ef24e486a56:logs/runs.jsonl:generic-api-key:37
+c6730a5f7158fe4516466dd508324ef24e486a56:logs/runs.jsonl:generic-api-key:43
+c6730a5f7158fe4516466dd508324ef24e486a56:logs/runs.jsonl:generic-api-key:44
+c6730a5f7158fe4516466dd508324ef24e486a56:logs/runs.jsonl:generic-api-key:45
+c6730a5f7158fe4516466dd508324ef24e486a56:logs/runs.jsonl:generic-api-key:46
+c6730a5f7158fe4516466dd508324ef24e486a56:logs/runs.jsonl:generic-api-key:47
+c6730a5f7158fe4516466dd508324ef24e486a56:logs/runs.jsonl:generic-api-key:48
+c6730a5f7158fe4516466dd508324ef24e486a56:logs/runs.jsonl:generic-api-key:6
+c6730a5f7158fe4516466dd508324ef24e486a56:logs/runs.jsonl:generic-api-key:7
+c6730a5f7158fe4516466dd508324ef24e486a56:logs/runs.jsonl:generic-api-key:8
+c6730a5f7158fe4516466dd508324ef24e486a56:logs/runs.jsonl:generic-api-key:9
