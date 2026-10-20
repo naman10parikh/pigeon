@@ -166,8 +166,10 @@ async function runE2B() {
     }
     // Install ONLY the runtime deps send-test needs (react + react-email render). Keeps the VM
     // fast; the send-test $0 path never touches the resend SDK (dynamic-imported on the key path).
+    // Versions match package.json: an unpinned react-dom drifted ahead of the pinned react and npm
+    // refused the tree (ERESOLVE). --ignore-scripts: dist/ is copied in, so `prepare` (tsc) must not run.
     const npm = await sbx.commands.run(
-      "cd /home/user/pigeon && npm install --omit=dev --no-audit --no-fund react react-dom @react-email/components @react-email/render commander sqids zod >/dev/null 2>&1 && echo OK",
+      "cd /home/user/pigeon && npm install --omit=dev --ignore-scripts --no-audit --no-fund react@19.2.7 react-dom@19.2.7 @react-email/components@1.0.12 @react-email/render@2.0.9 commander sqids zod >/dev/null 2>&1 && echo OK",
       { timeoutMs: 180_000 },
     );
     if (!/OK/.test(npm.stdout)) throw new Error(`npm install in sandbox failed (exit ${npm.exitCode}): ${npm.stderr.slice(0, 300)}`);

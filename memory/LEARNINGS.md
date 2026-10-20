@@ -27,3 +27,11 @@ Every error → root cause → rule. Auto-compressed when >500 lines (memory-com
 - **What broke:** `eval/eval.mjs` was written to block CI but ran only in the nightly job, so a change
   could merge with a failing golden task.
 - **Rule:** CI runs `pnpm test` and `pnpm eval` on every push and pull request (`.github/workflows/ci.yml`).
+
+## 2026-10-19 · Pin what you install in the sandbox, and skip lifecycle scripts
+- **What broke:** the E2B microVM booted, but `send-test` inside it never ran: `npm install` failed.
+- **Root cause:** the boot script installed `react-dom` unpinned while `package.json` pins `react@19.2.7`;
+  react-dom 19.3.1 wants react 19.3.1, so npm refused the tree (ERESOLVE). The copied `package.json` also
+  gained a `prepare` script (`tsc`) that cannot run under `--omit=dev`.
+- **Rule:** install the exact versions `package.json` pins, with `--ignore-scripts` (dist/ is copied in).
+  CI's sandbox job is allowed to fail, so read its log, not its badge.
