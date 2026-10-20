@@ -1,8 +1,13 @@
+@AGENTS.md
+
 # pigeon — Agent-Native Harness (deliverability-correct transactional email + notifications)
 
 > Forged from Energy via harness-forge (CP103). One repo = one recursively self-improving agent-native
 > harness. Energy is the control center; pigeon is a self-contained, deliverability-domain-expert flavor.
 > This file is pigeon's operating doc — read it every session.
+
+`AGENTS.md`, imported above, is the one source of instructions for every coding agent: the CLI verbs, the
+MCP tools, the refusals and where the knowledge lives. This file adds what is specific to Claude Code.
 
 ## What this is (the thesis)
 
@@ -64,6 +69,20 @@ observer). Same formula as every Energy harness, different data — the data is 
 The queryable memory layer indexes pigeon's **expertise brain** (`brain/*.md` — the six Wave-R artifacts +
 the 19 scenarios), NOT code history. `scripts/memory-search.sh "DMARC alignment"` returns a ranked `brain/`
 hit. `identity/MEMORY.md` is the ≤2,000-token bootstrap of critical deliverability facts.
+
+## MCP servers in a Claude Code session
+
+- The root `.mcp.json` is also loaded by the Claude Code plugin, so it holds only pigeon's own server
+  (`npx -y -p github:naman10parikh/pigeon pigeon-mcp`) and `context7`, which needs no key.
+- The development servers are in `.mcp.dev.json`: pigeon from the local build (`pigeon-local`, with
+  `RESEND_API_KEY`), `github`, `memory` and `obsidian`. Load them with `claude --mcp-config .mcp.dev.json`.
+  They read keys from environment variables only (`.env.example`).
+
+## Hooks
+
+`.claude/settings.json` runs the stream guard (`hooks/stream-refuse-guard.sh`) before every Bash call, and
+the plugin ships the same guard in `hooks/hooks.json`. It blocks a `pigeon send-test` or `pigeon notify`
+that routes cold or marketing mail through a transactional-only provider, and lets everything else through.
 
 ## Operating model
 

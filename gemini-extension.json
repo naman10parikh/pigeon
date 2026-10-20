@@ -1,0 +1,17 @@
+{
+  "name": "pigeon",
+  "version": "0.1.0",
+  "description": "Transactional email that reaches the inbox: authenticated, kept apart from marketing mail, easy to unsubscribe.",
+  "contextFileName": "GEMINI.md",
+  "mcpServers": {
+    "pigeon": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "-p",
+        "github:naman10parikh/pigeon",
+        "pigeon-mcp"
+      ]
+    }
+  }
+}

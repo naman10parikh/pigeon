@@ -120,6 +120,17 @@ async function handle(req: JsonRpcRequest): Promise<void> {
 
 /** Read newline-delimited JSON-RPC from stdin; one request per line. */
 function main(): void {
+  if (process.argv.includes("--help") || process.argv.includes("-h")) {
+    process.stdout.write(
+      "pigeon-mcp: pigeon's MCP server over stdio (newline-delimited JSON-RPC). Register it in an MCP " +
+        "client; `--version` prints the version.\n",
+    );
+    return;
+  }
+  if (process.argv.includes("--version")) {
+    process.stdout.write(`${SERVER_VERSION}\n`);
+    return;
+  }
   const rl = createInterface({ input: process.stdin, terminal: false });
   rl.on("line", (line) => {
     const trimmed = line.trim();

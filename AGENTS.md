@@ -34,6 +34,9 @@ pigeon ask "<symptom>"                 # diagnose against the 19 battle-tested s
 pigeon serve                           # launch the local cockpit (stdlib server + SPA), localhost:7791
 ```
 
+Run the CLI straight from GitHub with `npx -y -p github:naman10parikh/pigeon pigeon --help`, or from a clone
+with `pnpm install && pnpm build && node dist/cli.js --help`.
+
 Every verb logs to `logs/runs.jsonl`, exits 0 (ok) / non-zero (fail), and has a `--help`. Deterministic verbs
 (`verify`, `lint`, `stream-check`) need no network beyond DNS / static analysis and are `--offline`-safe where
 possible (`verify --dns-fixture <path>` for reproducible CI).
@@ -44,6 +47,11 @@ possible (`verify --dns-fixture <path>` for reproducible CI).
 `pigeon.warmup_plan` · `pigeon.suppress` · `pigeon.webhook_verify` · `pigeon.ses_narrative` ·
 `pigeon.migrate_plan` · `pigeon.notify` · `pigeon.ask` — mirror the CLI 1:1. Dual-mode: stdio-local now;
 hosted-OAuth deferred. `tools/list` is the contract surface.
+
+Start the server with `npx -y -p github:naman10parikh/pigeon pigeon-mcp` (the root `.mcp.json` does this), or
+`node dist/mcp/server.js` from a built clone; it reads `RESEND_API_KEY` from the environment when you send for
+real. The development servers (pigeon from the local build, `github`, `memory`, `obsidian`) are in
+`.mcp.dev.json`; load them with `claude --mcp-config .mcp.dev.json`.
 
 ## My behaviors you must respect (refusals, not warnings)
 

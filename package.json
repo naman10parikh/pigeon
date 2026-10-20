@@ -22,6 +22,7 @@
   ],
   "scripts": {
     "build": "tsc",
+    "prepare": "tsc",
     "dev": "tsx src/cli.ts",
     "test": "vitest run",
     "eval": "node eval/eval.mjs",

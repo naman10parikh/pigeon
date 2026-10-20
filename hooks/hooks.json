@@ -1,0 +1,16 @@
+{
+  "description": "pigeon's stream guard: blocks a `pigeon send-test` or `pigeon notify` command that routes cold or marketing mail through a transactional-only provider, which gets the whole account suspended.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/stream-refuse-guard.sh\""
+          }
+        ]
+      }
+    ]
+  }
+}

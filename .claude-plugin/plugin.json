@@ -1,0 +1,17 @@
+{
+  "name": "pigeon",
+  "version": "0.1.0",
+  "description": "Transactional email that reaches the inbox: authenticated, kept apart from marketing mail, easy to unsubscribe.",
+  "author": {
+    "name": "Naman Parikh",
+    "url": "https://github.com/naman10parikh"
+  },
+  "homepage": "https://github.com/naman10parikh/pigeon",
+  "repository": "https://github.com/naman10parikh/pigeon",
+  "license": "MIT",
+  "keywords": ["agent-native", "self-improving", "agent-employee", "claude-code", "transactional-email", "deliverability", "dmarc", "resend"],
+  "agents": [
+    "./.claude/agents/deliverability-auditor.md",
+    "./.claude/agents/template-doctor.md"
+  ]
+}

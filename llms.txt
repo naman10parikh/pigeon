@@ -1,40 +1,70 @@
 # pigeon
 
-> The deliverability-correct transactional-email + notifications layer for AI
-> agents — it arrives, in the inbox, not the spam folder. Powered by Energy.
-> pigeon is a domain-expert employee: it knows SPF/DKIM/DMARC alignment, sending
-> streams, RFC 8058 one-click unsubscribe, IP/domain warmup, and cross-client
-> email rendering, and it refuses the footguns that silently land mail in spam.
+> Transactional email that reaches the inbox: authenticated, kept apart from marketing mail, easy to unsubscribe.
+
+The deliverability-correct transactional-email + notifications layer for AI agents: it arrives, in the
+inbox, not the spam folder. Powered by Energy. pigeon is an agent-native, recursively self-improving
+domain-expert employee: it knows SPF/DKIM/DMARC alignment, sending streams, RFC 8058 one-click
+unsubscribe, IP and domain warmup, and cross-client email rendering, and it refuses the footguns that
+silently land mail in spam.
 
 ## Start here
 
-- [AGENTS.md](./AGENTS.md): how an agent consumes pigeon (CLI verbs, MCP tools, when to call which).
-- [identity/SOUL.md](./identity/SOUL.md): who pigeon is — the creed ("the ledger is the truth, not the status code"), what it IS / DOES / REFUSES.
+- [AGENTS.md](./AGENTS.md): how an agent consumes pigeon (CLI verbs, MCP tools, when to call which). The one source of instructions.
+- [identity/SOUL.md](./identity/SOUL.md): who pigeon is: the creed ("the ledger is the truth, not the status code"), what it is, does and refuses.
+- [README.md](./README.md): what it is, the quick start, and the one-step install for every coding agent.
+- [CLAUDE.md](./CLAUDE.md): Claude Code operating rules (imports AGENTS.md).
 - [brain/OPINIONS.md](./brain/OPINIONS.md): the stances a consuming agent should adopt (stream truth-table, POST-only unsubscribe, render-don't-guess).
 
-## Brain (the expertise — cite these)
+## Brain (the expertise, cite these)
 
-- [brain/EXPERTISE-MAP.md](./brain/EXPERTISE-MAP.md): the territory — where each concern lives.
-- [brain/BATTLE-TESTED-SCENARIOS.md](./brain/BATTLE-TESTED-SCENARIOS.md): 19 real SCN-* scenarios (symptom → diagnosis → resolution → prevention).
+- [brain/EXPERTISE-MAP.md](./brain/EXPERTISE-MAP.md): the territory, where each concern lives.
+- [brain/BATTLE-TESTED-SCENARIOS.md](./brain/BATTLE-TESTED-SCENARIOS.md): 19 real SCN-* scenarios (symptom, diagnosis, resolution, prevention).
 - [brain/KNOWN-PITFALLS.md](./brain/KNOWN-PITFALLS.md): 26 PIT-* footguns to refuse.
-- [brain/GAPS-AND-DISPUTES.md](./brain/GAPS-AND-DISPUTES.md): where the field disagrees / what pigeon is unsure about.
-- [brain/TOOL-MATRIX.md](./brain/TOOL-MATRIX.md): the provider/tool landscape (Resend, Postmark, SES, SendGrid, Novu, Cloudflare).
+- [brain/GAPS-AND-DISPUTES.md](./brain/GAPS-AND-DISPUTES.md): where the field disagrees and what pigeon is unsure about.
+- [brain/TOOL-MATRIX.md](./brain/TOOL-MATRIX.md): the provider and tool landscape (Resend, Postmark, SES, SendGrid, Novu, Cloudflare).
 
-## Tools (CLI verbs == MCP tools, 1:1)
+## CLI
 
-`verify` · `send-test` · `lint` · `stream-check` · `unsubscribe-gen` ·
-`warmup-plan` · `suppress` · `webhook-verify` · `ses-narrative` · `migrate-plan` ·
-`notify` · `ask`. Run `pigeon --help` for the CLI; the MCP server
-(`pigeon-mcp`, stdio) exposes the same set as `pigeon.*` tools. The A2A card is
-at [.well-known/agent.json](./.well-known/agent.json).
+- [pigeon](./src/cli.ts): `verify` · `send-test` · `lint` · `stream-check` · `unsubscribe gen` · `warmup plan` · `suppress` · `webhook verify` · `ses-narrative` · `migrate plan` · `notify` · `inbound setup` · `doctor` · `ask` · `serve`. Run `npx -y -p github:naman10parikh/pigeon pigeon --help`; every verb exits 0 on success and logs to `logs/runs.jsonl`.
+
+## MCP tools
+
+pigeon's own MCP server ([src/mcp/server.ts](./src/mcp/server.ts), bin `pigeon-mcp`, stdio) mirrors the CLI
+1:1. Start it with `npx -y -p github:naman10parikh/pigeon pigeon-mcp`. The A2A card is at
+[.well-known/agent.json](./.well-known/agent.json).
+
+- [pigeon.verify](./src/mcp/tools.ts): dig SPF, DKIM and DMARC and check alignment out of band.
+- [pigeon.send_test](./src/mcp/tools.ts): send a template in provider test mode with an idempotency key.
+- [pigeon.lint](./src/mcp/tools.ts): find Gmail, Outlook and preview-text hazards in email HTML.
+- [pigeon.stream_check](./src/mcp/tools.ts): allow or hard-refuse a stream and provider pair.
+- [pigeon.unsubscribe_gen](./src/mcp/tools.ts): RFC 8058 one-click unsubscribe config.
+- [pigeon.warmup_plan](./src/mcp/tools.ts): a warmup ramp run as a control loop.
+- [pigeon.suppress](./src/mcp/tools.ts): the cross-provider suppression list.
+- [pigeon.webhook_verify](./src/mcp/tools.ts): check a bounce or complaint webhook signature.
+- [pigeon.ses_narrative](./src/mcp/tools.ts): the SES production-access narrative.
+- [pigeon.migrate_plan](./src/mcp/tools.ts): the safe provider-migration runbook.
+- [pigeon.notify](./src/mcp/tools.ts): multi-channel fan-out (email, push, SMS, in-app).
+- [pigeon.ask](./src/mcp/tools.ts): diagnose a symptom against the 19 scenarios.
 
 ## Skills (repo-authored, each cites a brain node)
 
-- pigeon-deliverability-audit · pigeon-email-render-lint · pigeon-stream-separation ·
-  pigeon-unsubscribe-rfc8058 · pigeon-warmup-control-loop · pigeon-ses-sandbox-exit
-  (see `skills/<name>/SKILL.md`).
+- [pigeon-deliverability-audit](./skills/pigeon-deliverability-audit/SKILL.md): audit a sending domain and config against the scenarios and pitfalls.
+- [pigeon-email-render-lint](./skills/pigeon-email-render-lint/SKILL.md): catch cross-client rendering hazards before an email ships.
+- [pigeon-stream-separation](./skills/pigeon-stream-separation/SKILL.md): keep transactional, marketing and cold mail on separate streams.
+- [pigeon-unsubscribe-rfc8058](./skills/pigeon-unsubscribe-rfc8058/SKILL.md): POST-only one-click unsubscribe with opaque IDs.
+- [pigeon-warmup-control-loop](./skills/pigeon-warmup-control-loop/SKILL.md): warm a domain by watching deferrals, not a fixed schedule.
+- [pigeon-ses-sandbox-exit](./skills/pigeon-ses-sandbox-exit/SKILL.md): get SES production access with a narrative built from real handling.
 
 ## Sub-agents
 
-- `deliverability-auditor` (audit a domain/config vs the 19 scenarios + 26 pitfalls) ·
-  `template-doctor` (audit an email template for cross-client render hazards).
+- [deliverability-auditor](./.claude/agents/deliverability-auditor.md): audits a domain or config against the 19 scenarios and 26 pitfalls.
+- [template-doctor](./.claude/agents/template-doctor.md): audits an email template for cross-client render hazards.
+
+## Optional
+
+- [identity/MEMORY.md](./identity/MEMORY.md): the bootstrap memory (at most 2,000 tokens).
+- [memory/LEARNINGS.md](./memory/LEARNINGS.md): corrections turned into rules.
+- [dsip.json](./dsip.json): the self-improvement contract (Darwin DSIP).
+- [.claude-plugin/plugin.json](./.claude-plugin/plugin.json): the Claude Code plugin.
+- [gemini-extension.json](./gemini-extension.json): the Gemini CLI extension.

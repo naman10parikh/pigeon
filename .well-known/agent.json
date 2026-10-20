@@ -2,6 +2,7 @@
   "schemaVersion": "0.1",
   "name": "pigeon",
   "description": "The deliverability-correct transactional-email + notifications layer — it arrives, in the inbox, not the spam folder. Powered by Energy.",
+  "url": "https://github.com/naman10parikh/pigeon",
   "version": "0.1.0",
   "provider": { "organization": "Energy", "url": "https://github.com/naman10parikh/pigeon" },
   "endpoint": "stdio://pigeon-mcp",
