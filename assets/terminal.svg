@@ -26,7 +26,7 @@
 <text x="24" y="426" fill="#d8d3c8" xml:space="preserve">  webhook [options] &lt;op&gt; &lt;provider&gt; &lt;payload&gt;  validate a bounce/complaint webhook signature → suppress (JTBD-4)</text>
 <text x="24" y="446" fill="#d8d3c8" xml:space="preserve">  ses-narrative [options]                      author the SES production-access narrative from implemented handling </text>
 <text x="24" y="466" fill="#d8d3c8" xml:space="preserve">  migrate                                      the safe provider-migration runbook: export-logs-first, re-verify, wa</text>
-<text x="24" y="486" fill="#d8d3c8" xml:space="preserve">  notify [options] &lt;channels&gt;                  multi-channel fan-out email+push+SMS+in-app (Chime folded in)</text>
+<text x="24" y="486" fill="#d8d3c8" xml:space="preserve">  notify [options] &lt;channels&gt;                  multi-channel fan-out email+push+SMS+in-app (Chime folded in). Sendin</text>
 <text x="24" y="506" fill="#d8d3c8" xml:space="preserve">  inbound                                      Cloudflare Email Routing → webhook → gateway (JTBD-9, the G-09 gap-cl</text>
 <text x="24" y="526" fill="#d8d3c8" xml:space="preserve">  doctor [options]                             SDK/runtime health: pinned versions, @react-email/render present, key</text>
 <text x="24" y="546" fill="#d8d3c8" xml:space="preserve">  ask [options] &lt;symptom&gt;                      diagnose a symptom against the 19 battle-tested scenarios (the ask-th</text>
